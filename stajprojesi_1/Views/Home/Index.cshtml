@@ -1,0 +1,215 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+<div class="card mb-4 col-md-6">
+    <h5 class="card-header">Başvuru Formu</h5>
+    <!-- Account -->
+    
+    <hr class="my-0" />
+    <div class="card-body">
+        <form id="formAccountSettings" method="POST" onsubmit="return false">
+            <div class="row">
+                <div class="row mb-3">
+                    <label for="Proje_adi" class="form-label">Proje Adı</label>
+                    <input class="form-control"
+                           type="text"
+                           id="Proje_adi"
+                           name="Proje_adi"
+                           value=""
+                           autofocus />
+                </div>
+
+            
+                <div class="row mb-3">
+                    <label for="Basvuran_birim" class="form-label">Başvuran Birim</label>
+                    <select class="form-select" id="Basvuran_birim" name="Basvuran_birim">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.BasvuranBirimListesi != null)
+                        {
+                            @foreach (var item in ViewBag.BasvuranBirimListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="Basvuru_yapilan_proje" class="form-label">Başvuru Yapılan Proje</label>
+                    <select class="form-select" id="Basvuru_yapilan_proje" name="Basvuru_yapilan_proje">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.BasvuruYapilanProjeListesi != null)
+                        {
+                            @foreach (var item in ViewBag.BasvuruYapilanProjeListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="Basvuru_yapilan_tur" class="form-label">Başvuru Yapılan Tür</label>
+                    <select class="form-select" id="Basvuru_yapilan_tur" name="Basvuru_yapilan_tur">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.BasvuruTuruListesi != null)
+                        {
+                            @foreach (var item in ViewBag.BasvuruTuruListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="Katilimci_turu" class="form-label">Katılımcı Türü</label>
+                    <select class="form-select" id="Katilimci_turu" name="Katilimci_turu">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.KatilimciTuruListesi != null)
+                        {
+                            @foreach (var item in ViewBag.KatilimciTuruListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="Basvuru_donemi" class="form-label">Başvuru Dönemi</label>
+                    <select class="form-select" id="Basvuru_donemi" name="Basvuru_donemi">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.BasvuruDonemiListesi != null)
+                        {
+                            @foreach (var item in ViewBag.BasvuruDonemiListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="Basvuru_tarihi" class="form-label">Başvuru Tarihi</label>
+                    <input class="form-control"
+                           type="date"
+                           id="Basvuru_tarihi"
+                           name="Basvuru_tarihi"
+                           placeholder="yyyy-MM-dd" />
+                </div>
+                
+
+                <div class="row mb-2">
+                    <label for="Basvuru_durumu" class="form-label">Başvuru Durumu</label>
+                    <select class="form-select" id="Basvuru_durumu" name="Basvuru_durumu">
+                        <option selected disabled>Seçiniz</option>
+                        @if (ViewBag.BasvuruDurumuListesi != null)
+                        {
+                            @foreach (var item in ViewBag.BasvuruDurumuListesi as List<SelectListItem>)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Veri bulunamadı</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="Durum_tarihi" class="form-label">Durum Tarihi</label>
+                    <input class="form-control"
+                           type="date"
+                           id="Durum_tarihi"
+                           name="Durum_tarihi"
+                           placeholder="yyyy-MM-dd" />
+                </div>
+                
+
+                <div class="row mb-2">
+                    <label for="Hibe_tutari" class="form-label">Hibe Tutarı</label>
+                    <input class="form-control"
+                           type="text"
+                           id="Hibe_tutari"
+                           name="Hibe_tutari"
+                           value="" />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="dataGonder()">Kaydet</button>
+
+
+            </div>
+
+
+
+           
+        </form>
+    </div>
+    
+</div>
+
+<script>
+    function dataGonder() {
+        var url = '@Url.Action("BasvuruKaydet", "Home")';
+        
+        var Proje_adi = $("#Proje_adi").val();
+        var Basvuran_birim = $("#Basvuran_birim").val();
+        var Basvuru_yapilan_proje = $("#Basvuru_yapilan_proje").val();
+        var Basvuru_yapilan_tur = $("#Basvuru_yapilan_tur").val();
+        var Katilimci_turu = $("#Katilimci_turu").val();
+        var Basvuru_donemi = $("#Basvuru_donemi").val();
+        var Basvuru_tarihi = $("#Basvuru_tarihi").val();
+        var Basvuru_durumu = $("#Basvuru_durumu").val();
+        var Durum_tarihi = $("#Durum_tarihi").val();
+        var Hibe_tutari = $("#Hibe_tutari").val();
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: {
+                Proje_adi: Proje_adi,
+                Basvuran_birim: Basvuran_birim,
+                Basvuru_yapilan_proje: Basvuru_yapilan_proje,
+                Basvuru_yapilan_tur: Basvuru_yapilan_tur,
+                Katilimci_turu: Katilimci_turu,
+                Basvuru_donemi: Basvuru_donemi,
+                Basvuru_tarihi: Basvuru_tarihi,
+                Basvuru_durumu: Basvuru_durumu,
+                Durum_tarihi: Durum_tarihi,
+                Hibe_tutari: Hibe_tutari
+            },
+            success: function (veri) {
+                if (veri.success) {
+                    alert(veri.message);
+                    // Formu temizle
+                    document.getElementById("formAccountSettings").reset();
+                } else {
+                    alert("Hata: " + veri.message);
+                }
+            },
+            error: function(response) {
+                alert("Hata oluştu: " + response.responseText);
+            }
+        });
+    }
+</script>

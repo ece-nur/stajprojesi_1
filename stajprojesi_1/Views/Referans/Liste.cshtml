@@ -1,0 +1,298 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Referans Listesi";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bx bx-list-ul me-2"></i>
+                        Referans Listesi
+                    </h5>
+                    <a href="@Url.Action("Ekle", "Referans")" class="btn btn-primary" onclick="logButtonClick('Yeni Referans Ekle Butonu')">
+                        <i class="bx bx-plus me-1"></i>
+                        Yeni Referans Ekle
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Filtre Bölümü -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="referansTuruSelect" class="form-label">Referans Türü</label>
+                            <select class="form-select" id="referansTuruSelect" onchange="logSelectChange('Referans Türü', this.value); referansTuruDegisti()">
+                                <option value="">Referans Türü Seçiniz</option>
+                                @if (ViewBag.ReferansTurleri != null)
+                                {
+                                    @foreach (var item in ViewBag.ReferansTurleri as List<SelectListItem>)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="referansItemSelect" class="form-label">Referans Öğeleri</label>
+                            <select class="form-select" id="referansItemSelect" onchange="logSelectChange('Referans Öğesi', this.value); referansSecildi()" disabled>
+                                <option value="">Önce Referans Türü Seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Seçilen Öğe Bilgileri -->
+                    <div id="seciliReferansDiv" style="display: none;">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-2">Seçilen Referans:</h6>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bx bx-edit"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="seciliReferansAdi" placeholder="Referans adı" onchange="logInputChange('Referans Adı', this.value)">
+                                            <input type="hidden" id="seciliReferansId">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-success" onclick="logButtonClick('Düzenle Butonu'); referansGuncelle()">
+                                                <i class="bx bx-check me-1"></i>
+                                                Düzenle
+                                            </button>
+                                            <button type="button" class="btn btn-danger" onclick="logButtonClick('Sil Butonu'); referansSil()">
+                                                <i class="bx bx-trash me-1"></i>
+                                                Sil
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Frontend Logging Script -->
+<script src="~/js/logging.js"></script>
+
+<!-- JavaScript -->
+<script>
+// Logging helper functions
+function logButtonClick(buttonName) {
+    if (window.frontendLogger) {
+        window.frontendLogger.logEvent('Button Click', buttonName, 'user_interaction');
+    }
+}
+
+function logSelectChange(selectName, value) {
+    if (window.frontendLogger) {
+        window.frontendLogger.logEvent('Select Change', `${selectName}: ${value}`, 'user_interaction');
+    }
+}
+
+function logInputChange(inputName, value) {
+    if (window.frontendLogger) {
+        window.frontendLogger.logEvent('Input Change', `${inputName}: ${value}`, 'user_interaction');
+    }
+}
+
+function logSystemEvent(eventType, details) {
+    if (window.frontendLogger) {
+        window.frontendLogger.logEvent(eventType, details, 'system');
+    }
+}
+
+function referansTuruDegisti() {
+    console.log('referansTuruDegisti çalıştı');
+    
+    var referansTuru = document.getElementById('referansTuruSelect').value;
+    var referansItemSelect = document.getElementById('referansItemSelect');
+    var seciliReferansDiv = document.getElementById('seciliReferansDiv');
+
+    console.log('Seçilen tür:', referansTuru);
+    
+    // Log system event
+    logSystemEvent('Referans Türü Değişti', `Seçilen tür: ${referansTuru}`);
+
+    // Seçili referans alanını gizle
+    seciliReferansDiv.style.display = 'none';
+
+    if (referansTuru === '') {
+        referansItemSelect.disabled = true;
+        referansItemSelect.innerHTML = '<option value="">Önce Referans Türü Seçiniz</option>';
+        return;
+    }
+
+    // AJAX ile referansları getir
+    console.log('AJAX başlatılıyor...');
+    logSystemEvent('AJAX İsteği Başlatıldı', `Referans türü: ${referansTuru}`);
+    
+    fetch('/Referans/GetReferanslar?referansTuru=' + encodeURIComponent(referansTuru))
+        .then(function(response) {
+            console.log('Response alındı:', response);
+            if (!response.ok) {
+                throw new Error('HTTP error! status: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            console.log('Data:', data);
+            if (data.success) {
+                console.log('Veriler:', data.data);
+                logSystemEvent('AJAX Başarılı', `Veri sayısı: ${data.data.length}`);
+                populateReferansItems(data.data);
+                referansItemSelect.disabled = false;
+            } else {
+                console.error('Hata:', data.error);
+                logSystemEvent('AJAX Hatası', data.error);
+                alert('Hata: ' + data.error);
+            }
+        })
+        .catch(function(error) {
+            console.error('Fetch hatası:', error);
+            logSystemEvent('AJAX Fetch Hatası', error.message);
+            alert('Sunucu hatası: ' + error.message);
+        });
+}
+
+function populateReferansItems(referanslar) {
+    console.log('populateReferansItems çalıştı, veri sayısı:', referanslar.length);
+    
+    var select = document.getElementById('referansItemSelect');
+    console.log('Select element bulundu:', select);
+    
+    if (!select) {
+        console.error('referansItemSelect bulunamadı!');
+        return;
+    }
+    
+    select.innerHTML = '<option value="">Düzenlemek için seçiniz</option>';
+    console.log('Seçenekler temizlendi');
+
+    for (var i = 0; i < referanslar.length; i++) {
+        var referans = referanslar[i];
+        
+        var option = document.createElement('option');
+        option.value = referans.id; // API camelCase döndürüyor
+        option.textContent = referans.referansAdi;
+        select.appendChild(option);
+        console.log('Eklenen option - ID:', option.value, 'Ad:', option.textContent);
+    }
+    
+    console.log('Toplam option sayısı:', select.options.length);
+    console.log('Select içeriği:', select.innerHTML);
+    
+    logSystemEvent('Referans Öğeleri Populate Edildi', `Toplam öğe sayısı: ${referanslar.length}`);
+}
+
+function referansSecildi() {
+    var selectElement = document.getElementById('referansItemSelect');
+    var selectedId = selectElement.value;
+    console.log('Referans seçildi:', selectedId);
+
+    if (selectedId === '') {
+        document.getElementById('seciliReferansDiv').style.display = 'none';
+        return;
+    }
+
+    // Seçilen referansın bilgilerini al
+    var selectedText = selectElement.options[selectElement.selectedIndex].text;
+    
+    document.getElementById('seciliReferansId').value = selectedId;
+    document.getElementById('seciliReferansAdi').value = selectedText;
+    document.getElementById('seciliReferansDiv').style.display = 'block';
+    
+    logSystemEvent('Referans Seçildi', `ID: ${selectedId}, Ad: ${selectedText}`);
+}
+
+function referansGuncelle() {
+    var id = document.getElementById('seciliReferansId').value;
+    var yeniAd = document.getElementById('seciliReferansAdi').value.trim();
+
+    if (!yeniAd) {
+        alert('Referans adı boş olamaz!');
+        return;
+    }
+
+    logSystemEvent('Referans Güncelleme Başlatıldı', `ID: ${id}, Yeni ad: ${yeniAd}`);
+
+    var formData = new FormData();
+    formData.append('id', id);
+    formData.append('yeniAd', yeniAd);
+
+    fetch('/Referans/Guncelle', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.success) {
+            logSystemEvent('Referans Güncelleme Başarılı', `ID: ${id}, Yeni ad: ${yeniAd}`);
+            alert('Referans başarıyla güncellendi!');
+            referansTuruDegisti();
+        } else {
+            logSystemEvent('Referans Güncelleme Hatası', data.error);
+            alert('Hata: ' + data.error);
+        }
+    })
+    .catch(function(error) {
+        console.error('Hata:', error);
+        logSystemEvent('Referans Güncelleme Sistem Hatası', error.message);
+        alert('Sunucu hatası oluştu: ' + error.message);
+    });
+}
+
+function referansSil() {
+    var id = document.getElementById('seciliReferansId').value;
+    var adi = document.getElementById('seciliReferansAdi').value;
+
+    if (!confirm('"' + adi + '" referansını silmek istediğinizden emin misiniz?')) {
+        return;
+    }
+
+    logSystemEvent('Referans Silme Başlatıldı', `ID: ${id}, Ad: ${adi}`);
+
+    var formData = new FormData();
+    formData.append('id', id);
+
+    fetch('/Referans/Sil', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.success) {
+            logSystemEvent('Referans Silme Başarılı', `ID: ${id}, Ad: ${adi}`);
+            alert('Referans başarıyla silindi!');
+            document.getElementById('seciliReferansDiv').style.display = 'none';
+            referansTuruDegisti();
+        } else {
+            logSystemEvent('Referans Silme Hatası', data.error);
+            alert('Hata: ' + data.error);
+        }
+    })
+    .catch(function(error) {
+        console.error('Hata:', error);
+        logSystemEvent('Referans Silme Sistem Hatası', error.message);
+        alert('Sunucu hatası oluştu: ' + error.message);
+    });
+}
+
+console.log('JavaScript yüklendi!');
+</script>

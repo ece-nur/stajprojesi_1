@@ -1,0 +1,347 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+@model List<stajprojesi_1.Models.BasvuruModel>
+@Html.Partial("_Duzenle")
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <h5 class="card-header bg-light">Filtre</h5>
+        <div class="card-body">
+            <form id="formAccountSettings" method="POST" onsubmit="return false">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-3">
+                    <div class="col">
+                        <label for="Proje_adi" class="form-label">Proje Adı</label>
+                        <input class="form-control" type="text" id="Proje_adi" name="Proje_adi" />
+                    </div>
+                    <div class="col">
+                        <label for="Basvuran_birim" class="form-label">Başvuran Birim</label>
+                        <select class="form-select" id="Basvuran_birim" name="Basvuran_birim">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.BasvuranBirimListesi != null)
+                            {
+                                @foreach (var item in ViewBag.BasvuranBirimListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Basvuru_yapilan_proje" class="form-label">Başvuru Yapılan Proje</label>
+                        <select class="form-select" id="Basvuru_yapilan_proje" name="Basvuru_yapilan_proje">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.BasvuruYapilanProjeListesi != null)
+                            {
+                                @foreach (var item in ViewBag.BasvuruYapilanProjeListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Basvuru_yapilan_tur" class="form-label">Başvuru Yapılan Tür</label>
+                        <select class="form-select" id="Basvuru_yapilan_tur" name="Basvuru_yapilan_tur">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.BasvuruTuruListesi != null)
+                            {
+                                @foreach (var item in ViewBag.BasvuruTuruListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Katılımcı_turu" class="form-label">Katılımcı Türü</label>
+                        <select class="form-select" id="Katılımcı_turu" name="Katılımcı_turu">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.KatilimciTuruListesi != null)
+                            {
+                                @foreach (var item in ViewBag.KatilimciTuruListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Basvuru_donemi" class="form-label">Başvuru Dönemi</label>
+                        <select class="form-select" id="Basvuru_donemi" name="Basvuru_donemi">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.BasvuruDonemiListesi != null)
+                            {
+                                @foreach (var item in ViewBag.BasvuruDonemiListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Basvuru_tarihi" class="form-label">Başvuru Tarihi</label>
+                        <input class="form-control" type="date" id="Basvuru_tarihi" name="Basvuru_tarihi" />
+                    </div>
+                    <div class="col">
+                        <label for="Durum_tarihi" class="form-label">Durum Tarihi</label>
+                        <input class="form-control" type="date" id="Durum_tarihi" name="Durum_tarihi" />
+                    </div>
+                    <div class="col">
+                        <label for="Basvuru_durumu" class="form-label">Başvuru Durumu</label>
+                        <select class="form-select" id="Basvuru_durumu" name="Basvuru_durumu">
+                            <option selected disabled>Seçiniz</option>
+                            @if (ViewBag.BasvuruDurumuListesi != null)
+                            {
+                                @foreach (var item in ViewBag.BasvuruDurumuListesi as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Veri bulunamadı</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="Hibe_tutari" class="form-label">Hibe Tutarı</label>
+                        <input class="form-control" type="text" id="Hibe_tutari" name="Hibe_tutari" />
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start mt-2">
+                        <button type="submit" class="btn btn-primary">Filtrele</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="card">
+        <h5 class="card-header">Başvuru Listesi</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr class="text-nowrap">
+                        <th>ID</th>
+                        <th>Başvuran Birim</th>
+                        <th>Proje Adı</th>
+                        <th>Başvuru Yapılan Proje</th>
+                        <th>Başvuru Yapılan Tür</th>
+                        <th>Katılımcı Türü</th>
+                        <th>Başvuru Dönemi</th>
+                        <th>Başvuru Tarihi</th>
+                        <th>Başvuru Durumu</th>
+                        <th>Durum Tarihi</th>
+                        <th>Hibe Tutarı</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@Model[i].Basvuran_birim</td>
+                            <td>@Model[i].Proje_adi</td>
+                            <td>@Model[i].Basvuru_yapilan_proje</td>
+                            <td>@Model[i].Basvuru_yapilan_tur</td>
+                            <td>@Model[i].Katılımcı_turu</td>
+                            <td>@Model[i].Basvuru_donemi</td>
+                            <td>@Model[i].Basvuru_tarihi.ToShortDateString()</td>
+                            <td>@Model[i].Basvuru_durumu</td>
+                            <td>@Model[i].Durum_tarihi.ToShortDateString()</td>
+                            <td>@Model[i].Hibe_tutari ₺</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-warning" onclick="editBasvuru(@Model[i].Id)">Düzenle</button>
+                            </td>
+
+
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="basvuruSil(@Model[i].Id)">Sil</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+        <div class="mt-4">
+            <form id="excelForm" method="post" action="/Basvuru/ExcelFiltreAktar">
+                <input type="hidden" name="Proje_adi" />
+                <input type="hidden" name="Basvuran_birim" />
+                <input type="hidden" name="Basvuru_yapilan_proje" />
+                <input type="hidden" name="Basvuru_yapilan_tur" />
+                <input type="hidden" name="Katılımcı_turu" />
+                <input type="hidden" name="Basvuru_donemi" />
+                <input type="hidden" name="Basvuru_tarihi" />
+                <input type="hidden" name="Durum_tarihi" />
+                <input type="hidden" name="Basvuru_durumu" />
+                <input type="hidden" name="Hibe_tutari" />
+                <button type="submit" class="btn btn-success">Excel'e Aktar</button>
+            </form>
+        </div>
+
+
+
+    </div>
+</div>
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('button[type="submit"]').click(function () {
+            var formData = $('#formAccountSettings').serialize();
+
+            $.ajax({
+                url: '@Url.Action("BasvuruListesiFiltre", "Basvuru")',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    var tbody = $("table tbody");
+                    tbody.empty();
+
+                    $.each(data, function (i, item) {
+                        var row = "<tr>" +
+                            "<td>" + (i + 1) + "</td>" +
+                            "<td>" + item.basvuran_birim + "</td>" +
+                            "<td>" + item.proje_adi + "</td>" +
+                            "<td>" + item.basvuru_yapilan_proje + "</td>" +
+                            "<td>" + item.basvuru_yapilan_tur + "</td>" +
+                            "<td>" + item.katılımcı_turu + "</td>" +
+                            "<td>" + item.basvuru_donemi + "</td>" +
+                            "<td>" + item.basvuru_tarihi.split('T')[0] + "</td>" +
+                            "<td>" + item.basvuru_durumu + "</td>" +
+                            "<td>" + item.durum_tarihi.split('T')[0] + "</td>" +
+                            "<td>" + item.hibe_tutari + " ₺</td>" +
+                                    "<td><button type='button' class='btn btn-sm btn-warning' onclick='editBasvuru(" + item.id + ")'>Düzenle</button></td>" +
+                "<td>" +
+                    "<form action='/Basvuru/Sil' method='post' onsubmit='return confirm(\"Silmek istediğinize emin misiniz?\");'>" +
+                        "<input type='hidden' name='id' value='" + item.id + "' />" +
+                        "<button type='submit' class='btn btn-sm btn-danger'>Sil</button>" +
+                    "</form>" +
+                "</td>" +
+
+                            "<td></td><td></td>" +
+                            "</tr>";
+                        tbody.append(row);
+                    });
+                },
+                error: function () {
+                    alert("Hata oluştu");
+                }
+            });
+        });
+    });
+</script>
+    <script>
+        // Excel formuna filtre verilerini kopyala
+        $('#excelForm').submit(function () {
+            var formData = $('#formAccountSettings').serializeArray();
+            $.each(formData, function (i, field) {
+                $('#excelForm input[name="' + field.name + '"]').val(field.value);
+            });
+        });
+    </script>
+
+    <script>
+        function editBasvuru(id) {
+            $.ajax({
+                url: '/Basvuru/GetBasvuru/' + id,
+                type: 'GET',
+                data: {id: id},
+                success: function (data) {
+                    // Form alanlarını doldur
+                    $('#Id').val(data.id);
+                    $('#Proje_adi').val(data.proje_adi);
+                    $('#Basvuran_birim').val(data.basvuran_birim);
+                    $('#Basvuru_yapilan_proje').val(data.basvuru_yapilan_proje);
+                    $('#Basvuru_yapilan_tur').val(data.basvuru_yapilan_tur);
+                    $('#Katılımcı_turu').val(data.katılımcı_turu);
+                    $('#Basvuru_donemi').val(data.basvuru_donemi);
+                    $('#Basvuru_tarihi').val(data.basvuru_tarihi.split('T')[0]);
+                    $('#Basvuru_durumu').val(data.basvuru_durumu);
+                    $('#Durum_tarihi').val(data.durum_tarihi.split('T')[0]);
+                    $('#Hibe_tutari').val(data.hibe_tutari);
+
+                    // Popup'ı göster
+                    $('#editModal').modal('show');
+                },
+                error: function () {
+                    alert('Veri getirilemedi.');
+                }
+            });
+        }
+
+        $('#btnDegistir').click(function () {
+            var formData = $('#editForm').serialize();
+            $.ajax({
+                url: '/Basvuru/UpdateBasvuru',
+                type: 'POST',
+                data: formData,
+                success: function () {
+                    $('#editModal').modal('hide');
+                    location.reload(); // Listeyi yenile
+                },
+                error: function () {
+                    alert('Güncelleme hatası');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function basvuruSil(id) {
+            if (confirm("Bu başvuruyu silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: '/Basvuru/BasvuruSil',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload(); // Sayfayı yenile
+                        } else {
+                            alert("Silme başarısız: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Sunucu hatası!");
+                    }
+                });
+            }
+        }
+    </script>
+
+}
+
+
+
+
+

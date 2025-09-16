@@ -1,0 +1,42 @@
+﻿@model List<Role>
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Roller Listesi</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-bordered table-hover table-striped mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 70%;">Rol Adı</th>
+                        <th style="width: 30%;">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var rol in Model)
+                        {
+                            <tr>
+                                <td>@rol.Name</td>
+                                <td>
+                                    <a href="@Url.Action("Duzenle", "Yetki", new { id = rol.Id })" class="btn btn-sm btn-warning">
+                                        <i class="bx bx-edit-alt"></i> Düzenle
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">Kayıtlı rol bulunamadı.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

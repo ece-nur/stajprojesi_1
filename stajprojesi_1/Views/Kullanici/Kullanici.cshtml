@@ -1,0 +1,108 @@
+﻿@using stajprojesi_1.Models
+@{
+    ViewData["Title"] = "Kullanıcı İşlemleri";
+
+}
+
+<div class="container mt-3">
+    <div class="card shadow-sm">
+        <h5 class="card-header bg-light">Kullanıcı Ekleme</h5>
+        <div class="card-body">
+            <form asp-action="KullaniciEkle" asp-controller="Kullanici" method="post">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-3">
+                    <div class="col">
+                        <label for="Username" class="form-label">Kullanıcı Adı</label>
+                        <input class="form-control" type="text" id="Username" name="Username">
+                    </div>
+
+                    <div class="col">
+                        <label for="Email" class="form-label">E-Mail</label>
+                        <input class="form-control" type="text" id="Email" name="Email">
+                    </div>
+
+                    <div class="col">
+                        <label for="Password" class="form-label">Şifre</label>
+                        <input class="form-control" type="text" id="Password" name="Password">
+                    </div>
+                    <div class="col d-flex align-items-end">
+                        <button type="submit" class="btn btn-info">Kullanıcı Ekle</button>
+                    </div>
+                </div>
+                <input name="__RequestVerificationToken" type="hidden" value="..." />
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="card">
+        <h5 class="card-header">Kullanıcı Listesi</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr class="text-nowrap">
+                        <th>#</th>
+                        <th>Kullanıcı Adı</th>
+                        <th>E-Mail</th>
+                        <th>Şifre</th>
+                        <th>Rol</th>
+                        <th>Yetki</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int siraNo = 1;
+                    }
+
+                    @foreach (var kullanici in Model)
+                    {
+                        <tr>
+                            <td>@siraNo</td>
+                            <td>@kullanici.Username</td>
+                            <td>@kullanici.Email</td>
+                            <td>@kullanici.Password</td>
+
+                            <!-- Mevcut rol adı -->
+                            <td>@kullanici.RolName</td>
+
+                            <!-- Yetki Ata Formu -->
+                            <td>
+                                <form asp-action="RolAta" asp-controller="Kullanici" method="post" class="d-flex">
+                                    <input type="hidden" name="userId" value="@kullanici.Id" />
+                                    <select name="roleId" class="form-select form-select-sm me-2">
+                                    @foreach (var rol in ViewBag.Roller as List<Role>)
+                                    {
+                                        if (kullanici.RolId == rol.Id)
+                                        {
+                                            <option value="@rol.Id" selected>@rol.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@rol.Id">@rol.Name</option>
+                                        }
+                                    }
+                                    </select>
+
+                                    <button type="submit" class="btn btn-primary btn-sm">Ata</button>
+                                </form>
+                            </td>
+
+                            <!-- Silme Formu -->
+                            <td>
+                                <form asp-action="KullaniciSil" asp-controller="Kullanici" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@kullanici.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                        siraNo++;
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

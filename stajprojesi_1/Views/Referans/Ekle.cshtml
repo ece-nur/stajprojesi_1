@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Referans Ekle";
+    var tipler = ViewBag.Tipler as List<string>;
+}
+
+<div class="container mt-5">
+    <h3>Referans Ekle</h3>
+
+    <form asp-controller="Referans" asp-action="Kaydet" method="post">
+        <div class="mb-3">
+            <label>Referans Tipi</label>
+            <select name="Tipi" class="form-select" required>
+                <option value="">Seçiniz</option>
+                @foreach (var tip in tipler)
+                {
+                    <option value="@tip">@tip</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Yeni Değer</label>
+            <input type="text" name="ReferansAdi" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+</div>

@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model RoleMenuEditViewModel
+
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header  text-white">
+            <h5 class="mb-0"> Rol Menüsü Düzenle</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <input type="hidden" name="RoleId" value="@Model.RoleId" />
+
+                <div class="mb-3">
+                    <h6 class="text-secondary mb-3">📋 İzin Verilecek Menüler:</h6>
+                    <div class="row">
+                        @foreach (var menu in Model.AllMenus)
+                        {
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input type="checkbox" name="SelectedMenuIds" value="@menu.Id"
+                                           class="form-check-input"
+                                           id="menu_@menu.Id"
+                                           @(Model.SelectedMenuIds.Contains(menu.Id) ? "checked" : "") />
+                                    <label class="form-check-label" for="menu_@menu.Id">@menu.Name</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bx bx-save"></i> Kaydet
+                </button>
+                <a href="@Url.Action("Yetki", "Yetki")" class="btn btn-secondary ms-2">
+                    <i class="bx bx-arrow-back"></i> Geri Dön
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
